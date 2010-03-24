@@ -812,6 +812,15 @@ table.awaiting td.visitor {
 	margin-bottom:1em;
 }
 
+/* Operators */
+.OnlineOperators {
+	font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+}
+
+.OnlineOperators .Away {
+	color: blue;
+}
+
 /* rtl rules */
 
 .lrtl .dashitem img, .lrtl #dashlocalesPopup h2 img {

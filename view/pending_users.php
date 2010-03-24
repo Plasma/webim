@@ -88,6 +88,8 @@ function tpl_content() { global $page, $webimroot;
 <div id="connstatus">
 </div>
 
+<div id="OnlineOperators" class="OnlineOperators"></div>
+
 <div id="connlinks">
 <?php if($page['istatus']) { ?>
 <a href="users.php<?php echo $page['havemenu'] ? "" : "?nomenu" ?>"><?php echo getlocal("pending.status.setonline") ?></a>

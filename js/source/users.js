@@ -219,7 +219,7 @@ Class.inherit( Ajax.ThreadListUpdater, Ajax.Base, {
 	}
 	return false;
   },
-
+  
   updateQueueMessages: function() {
   	function queueNotEmpty(t,id) {
 		var startRow = $(id);
@@ -273,31 +273,65 @@ Class.inherit( Ajax.ThreadListUpdater, Ajax.Base, {
 	}
   },
   
-  updateContent: function(root) {
+  updateThreads: function(root) {
 	var newAdded = false;
-	if( root.tagName == 'threads' ) {
-		var _time = NodeUtils.getAttrValue(root, "time");
-		var _revision = NodeUtils.getAttrValue(root, "revision" );
+	var _time = NodeUtils.getAttrValue(root, "time");
+	var _revision = NodeUtils.getAttrValue(root, "revision" );
+	
+	if( _time )
+		this.delta = (new Date()).getTime() - _time;
+	if( _revision )
+		this._options.lastrevision = _revision;
+	
+	for( var i = 0; i < root.childNodes.length; i++ ) {
+		var node = root.childNodes[i];
+		if( node.tagName == 'thread' )
+			if( this.updateThread(node) )
+				newAdded = true;
+	}
+	this.updateQueueMessages();
+	this.updateTimers();
+	this.setStatus(this._options.istatus ? "Away" : "Up to date");
+	if( newAdded ) {
+		playSound(webimRoot+'/sounds/new_user.wav');
+		window.focus();
+		if(updaterOptions.showpopup) {
+			alert(localized[5]);
+		}
+	}
+  },
+  
+  updateOperators: function(root) {
+  	var div = $('OnlineOperators');
+  	if (!div)
+  		return;
 
-		if( _time )
-			this.delta = (new Date()).getTime() - _time;
-		if( _revision )
-			this._options.lastrevision = _revision;
+	var names = [];
+	var awayText = NodeUtils.getAttrValue(root, 'away');
+	
+	for( var i = 0; i < root.childNodes.length; i++ ) {
+		var node = root.childNodes[i];
+		if(node.tagName != 'operator')
+			continue;
+		
+		var name = NodeUtils.getAttrValue(node, 'name');
+		var isAway = NodeUtils.getAttrValue(node, 'away') == 1;
+		
+		names[names.length] = name + (isAway ? ' <span class="Away">' + awayText + '</span>' : '');
+	}
 
+	div.innerHTML = NodeUtils.getAttrValue(root, 'field') + ' ' + names.join(', ');
+  },
+  
+  updateContent: function(root) {
+	if( root.tagName == 'success' ) {
 		for( var i = 0; i < root.childNodes.length; i++ ) {
 			var node = root.childNodes[i];
-			if( node.tagName == 'thread' )
-				if( this.updateThread(node) )
-					newAdded = true;
-		}
-		this.updateQueueMessages();
-		this.updateTimers();
-		this.setStatus(this._options.istatus ? "Away" : "Up to date");
-		if( newAdded ) {
-			playSound(webimRoot+'/sounds/new_user.wav');
-			window.focus();
-			if(updaterOptions.showpopup) {
-				alert(localized[5]);
+			
+			if (node.tagName == 'threads') {
+				this.updateThreads(node);
+			} else if (node.tagName == 'operators') {
+				this.updateOperators(node);
 			}
 		}
 	} else if( root.tagName == 'error' ) {

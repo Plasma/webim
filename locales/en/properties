@@ -99,6 +99,8 @@ clients.queue.chat=Visitors in dialogs
 clients.queue.prio=Priority visitors queue
 clients.queue.wait=Waiting for operator for the first time
 clients.title=List of awaiting visitors
+clients.online_operators.field=Online Operators:
+clients.online_operators.away=(Away)
 common.asterisk_explanation=<b><span style='font-size:8.0pt;color:red'>*</span></b> - mandatory fields
 company.title=Mibew Messenger Community
 confirm.take.head=Change operator
