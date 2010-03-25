@@ -33,7 +33,7 @@ $isrtl = getlocal("localedirection") == 'rtl';
 <title>
 	<?php echo $page['title'] ?> - <?php echo getlocal("app.title") ?>
 </title>
-<link href="<?php echo $webimroot ?>/default.css" rel="stylesheet" type="text/css" />
+<link href="<?php echo $webimroot ?>/default.css?2" rel="stylesheet" type="text/css" />
 <!--[if lte IE 6]><script language="JavaScript" type="text/javascript" src="<?php echo $webimroot ?>/<?php echo jspath() ?>/ie.js"></script><![endif]-->
 </head>
 <body<?php if(!function_exists('tpl_menu')) { ?> style="min-width: 400px;"<?php } ?>>
